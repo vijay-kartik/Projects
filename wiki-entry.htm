@@ -1,0 +1,42 @@
+<html>
+<head>
+  <title>Wiki-Entry
+  </title>
+</head>
+<style>
+  a:link {
+    text-decoration: none;
+  }
+  a:hover {
+    text-decoration: none;
+  }
+  a:visited {
+    text-decoration: none;
+  }
+</style>
+<body>
+<br><br><br><br><br><center>
+
+  <a href = "https://en.wikipedia.org/wiki/Special:Random" target="_blank">Click fere for a random article</a>
+
+  <input type="text" id="searchText" />
+  <button id=submit>Submit</button>
+</center>
+<div id="div1"></div>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js">
+</script>
+<script>
+$(document).ready(function(){
+  $("#submit").click(function(){
+
+  $.ajax({
+    url: "http://en.wikipedia.org/w/api.php?action=query&format=json&list=search&srsearch=" + document.getElementById('searchText').value,
+    type: "GET",
+    success: function(res){
+      console.log(res);
+    }
+  })
+})
+})
+</script>
+</html>
