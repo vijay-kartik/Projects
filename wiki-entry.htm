@@ -32,8 +32,14 @@ $(document).ready(function(){
   $.ajax({
     url: "http://en.wikipedia.org/w/api.php?action=query&format=json&list=search&srsearch=" + document.getElementById('searchText').value,
     type: "GET",
+    dataType: 'jsonp',
     success: function(res){
       console.log(res);
+      $("#div1").append("Search results:<br><br>");
+      var arr=["0","1","2","3","4","5","6","7","8","9"];
+      for(var i=0; i<10; i++){
+      $("#div1").append("<a href='https://en.wikipedia.org/wiki/" +res.query.search["" + arr[i]].title + "'>" + res.query.search[arr[i]].title + "</a>" + "<p>" + res.query.search[arr[i]].snippet + "</p><br><br>");
+}
     }
   })
 })

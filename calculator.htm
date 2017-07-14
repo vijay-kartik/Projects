@@ -1,0 +1,209 @@
+<html>
+<style>
+  .ralign {
+    text-align: right;
+  }
+
+</style>
+<body>
+
+  <h2>Calculator</h2>
+  <div id=calculator>
+    <textarea id=screen class=ralign></textarea>
+    <div class=outer>
+      <button value=9>9</button>
+      <button value=8>8</button>
+      <button value=7>7</button>
+      <button value=6>6</button>
+      <button value=5>5</button>
+      <button value=4>4</button>
+      <button value=3>3</button>
+      <button value=2>2</button>
+      <button value=1>1</button>
+      <button value=+>+</button>
+      <button value=->-</button>
+      <button value=*>X</button>
+      <button value=/ >/</button>
+      <button value="ac">AC</button>
+      <button value=0>0</button>
+      <button value=.>.</button>
+      <button value='='>=</button>
+    </div>
+
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js">
+      </script>
+      <script>
+        $(document).ready(function(){
+
+          var entry = '';
+          var ans = '';
+          var current = '';
+          var log = '';
+          var decimal = true;
+          var reset = '';
+
+
+          $("button").click(function(){
+            entry = $(this).attr("value");
+    console.log('entry: ' + entry);
+
+
+    //reset for log after answer to equation.
+    if (reset) {
+      if (entry === '/' || entry === '*' || entry === '-' || entry === '+') {
+        log = ans;
+      } else {
+        ans = '';
+      }
+    }
+    reset = false;
+
+    // All clear or Clear Entry
+    if (entry === 'ac' ) {
+      ans = '';
+      current = '';
+      entry = '';
+      log = '';
+
+      $('#screen').html('0');
+      decimal = true;
+    }
+
+    // prevents more than one deciminal in a number  //&& current === 'noChange'
+    if (entry === '.' || entry === '0.') {
+      if (!decimal) {
+        entry = '';
+      }
+    }
+
+    // prevents improper use of first digit
+    if (ans.length === 0 && isNaN(entry) && entry !== '.' || ans.length === 0 && entry === '0') {
+      entry = '';
+      ans = '';
+    }
+
+    // prevents extra operators
+    if (current !== 'noChange') {
+      if (current === '' && isNaN(entry) && entry !== '.' || isNaN(current) && isNaN(entry) && entry !== '.') {
+        entry = '';
+      }
+    }
+
+    // digit combining
+    while (Number(entry) || entry === '0' || current === '.') {
+
+      if (isNaN(current) && entry === '0' && current !== '.') {
+        entry = '';
+      } else if (isNaN(current) && Number(entry) && current !== '.') {
+        current = '';
+      }
+      if (entry === '.') {
+        decimal = false;
+      }
+      if (current === '0.' && isNaN(entry)) {
+        entry = '';
+      } else {
+        if (current[current.length - 1] === '.') {
+          current = current.concat(entry);
+        } else {
+          current += entry;
+        }
+        ans += entry;
+        $('#screen').html(current);
+        log += entry;
+
+        entry = '';
+      }
+    }
+
+    // Operation list
+
+    if (entry === '.') {
+      if (current === '' || isNaN(current[current.length - 1])) {
+        current = '0.';
+        ans += entry;
+        $('#screen').html('0.');
+        log += current;
+
+
+      } else {
+        current = current.concat('.');
+        ans = ans.concat('.');
+        log = ans;
+
+        $('#screen').html(current);
+      }
+      entry = '';
+      decimal = false;
+
+    } else if (entry === '/') {
+      current = '/';
+      ans = eval(ans) +current;
+      log += current;
+
+      $('#screen').html('/');
+      entry = '';
+      decimal = true;
+
+    } else if (entry === '*') {
+      current = '*';
+      ans = eval(ans) +current;
+      log += 'x';
+
+      $('#screen').html('x');
+      entry = '';
+      decimal = true;
+
+    } else if (entry === '-') {
+      current = '-';
+      ans = eval(ans) +current;
+      log += current;
+
+      $('#screen').html('-');
+      entry = '';
+      decimal = true;
+
+    } else if (entry === '+') {
+      current = '+';
+      ans += current;
+      log += current;
+
+      $('#screen').html('+');
+      entry = '';
+      decimal = true;
+
+    } else if (entry === '=') {
+      if (current[current.length - 1] === '.') {
+        entry = '';
+      } else {
+        current = eval(ans).toString();
+        $('#screen').html(eval(ans));
+        ans = eval(ans);
+        log += entry + ans;
+
+        log = ans;
+        entry = '';
+        reset = true;
+        decimal = true;
+      }
+      current = 'noChange';
+    }
+    entry = '';
+
+    if (reset) {
+      log = '';
+    }
+
+
+
+    console.log('decimal: ' + decimal);
+    console.log('current: ' + current);
+    console.log('answer: ' + ans);
+
+          });
+
+        })
+
+      </script>
+</body>
+</html>

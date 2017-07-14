@@ -1,0 +1,93 @@
+<html>
+<style>
+body {
+  font-family: 'Lato', sans-serif;
+  text-align: center;
+  font-size: 1em;
+}
+
+
+
+</style>
+<head>
+  <title>Weather App
+  </title>
+  <script type="text/javascript" src="https://code.jquery.com/jquery-2.2.3.js">
+  </script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDVH-mmOSrc5pHGGyWMnvAuH2Bi-WtoHCw">
+</script>
+</head>
+<body>
+  <h1>Welcome to the weather app
+  </h1>
+
+  <center>Your are currently in :</center>
+  <div id="divLocn">
+  </div>
+  <div id="divTemp">
+  </div>
+  <button id="submit">Show weather
+  </button>
+  <button id="open">show weather alt</button>
+<script>
+var latit, longit;
+var proxy = 'https://cors-anywhere.herokuapp.com/';
+var source="tatti";
+$(document).ready(function(){
+  navigator.geolocation.getCurrentPosition(function(position) {
+    latit=position.coords.latitude;
+    longit=position.coords.longitude;
+//console.log(latit + "," + longit);
+
+$.ajax({
+  url: 'http://api.openweathermap.org/data/2.5/weather?lat='+ latit +'&lon='+ longit +'&APPID=92ef1a223226c4b4dd2210a04016b4e4',
+  type: "GET",
+  success: function(res){
+    console.log(res);
+    $("#divLocn").html("" + res.name + "\t" + res.clouds.all);
+    $("#submit").html("" + res.weather["0"].description);
+    $("#open").html("WS: " + res.wind.speed + "knots")
+    $("#divTemp").append("" + Math.trunc(res.main.temp-273) + "°C");
+
+    switch (res.weather["0"].description) {
+      case "clear sky": source="http://openweathermap.org/img/w/01d.png";
+        break;
+      case "rain": source="http://openweathermap.org/img/w/10d.png";
+        break;
+      case "few clouds": source="http://openweathermap.org/img/w/02d.png";
+        break;
+      case "scattered clouds": source="http://openweathermap.org/img/w/03d.png";
+        break;
+      case "broken clouds": source="http://openweathermap.org/img/w/04d.png";
+        break;
+      case "shower rain": source="http://openweathermap.org/img/w/09d.png";
+        break;
+      case "thunderstorm": source="http://openweathermap.org/img/w/11d.png";
+        break;
+      case "snow": source="http://openweathermap.org/img/w/13d.png";
+        break;
+      case "mist": source="http://openweathermap.org/img/w/50d.png";
+        break;
+
+
+    }
+    console.log("" + source);
+    $("#divTemp").append("<img src=" + source + "></img>");
+
+
+  }
+
+});
+
+});
+
+//http://openweathermap.org/img/w/10d.png
+
+
+});
+
+
+</script>
+</body>
+
+</html>
